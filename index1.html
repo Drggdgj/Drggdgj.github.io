@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>💌</title>
+<style>
+  :root{
+    --bg1:#2b1f1a;
+    --bg2:#1a1210;
+    --pink:#c9a15a;
+    --pink-dark:#8f6a2e;
+    --text:#f0e6d8;
+    --card-bg:rgba(30,22,18,0.6);
+  }
+
+  *{box-sizing:border-box;}
+  html,body{
+    margin:0;
+    padding:0;
+    min-height:100%;
+  }
+  body{
+    background: 
+      linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)),
+      url('665.jpg') center/cover no-repeat fixed;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    color: var(--text);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:100vh;
+    padding:24px;
+    overflow-x:hidden;
+    position:relative;
+  }
+
+  .floating-hearts{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    overflow:hidden;
+    z-index:0;
+  }
+  .floating-hearts span{
+    position:absolute;
+    bottom:-10%;
+    font-size:22px;
+    opacity:0.55;
+    animation: rise linear infinite;
+    color: var(--pink);
+  }
+  @keyframes rise{
+    0%{ transform: translateY(0) rotate(0deg); opacity:0;}
+    10%{opacity:0.6;}
+    100%{ transform: translateY(-120vh) rotate(360deg); opacity:0;}
+  }
+
+  .card{
+    position:relative;
+    z-index:1;
+    background: var(--card-bg);
+    backdrop-filter: blur(6px);
+    border-radius: 28px;
+    padding: 40px 32px 34px;
+    max-width: 420px;
+    width:100%;
+    text-align:center;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+  }
+
+  .gallery{
+    display:flex;
+    justify-content:center;
+    gap:14px;
+    margin-bottom: 26px;
+    flex-wrap:wrap;
+  }
+  .gallery svg{
+    width:64px;
+    height:64px;
+    color: var(--pink);
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));
+    animation: pulse 2.4s ease-in-out infinite;
+  }
+  .gallery svg:nth-child(2){ animation-delay: .3s; }
+  .gallery svg:nth-child(3){ animation-delay: .6s; }
+  @keyframes pulse{
+    0%,100%{ transform: scale(1); }
+    50%{ transform: scale(1.12); }
+  }
+
+  h1{
+    font-size: 1.4rem;
+    margin: 0 0 22px;
+    line-height:1.4;
+    font-weight:600;
+  }
+
+  button{
+    background: linear-gradient(135deg, var(--pink), var(--pink-dark));
+    color:white;
+    border:none;
+    padding: 16px 36px;
+    font-size: 1.05rem;
+    font-weight:600;
+    border-radius: 999px;
+    cursor:pointer;
+    box-shadow: 0 10px 24px rgba(0,0,0,0.4);
+    transition: transform .15s ease, box-shadow .15s ease;
+  }
+  button:hover{
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 14px 30px rgba(0,0,0,0.5);
+  }
+  button:active{
+    transform: translateY(0) scale(0.97);
+  }
+
+  #message{
+    margin-top: 26px;
+    font-size: 1.7rem;
+    font-weight:700;
+    color: var(--pink-dark);
+    min-height: 2.4em;
+    opacity:0;
+    transform: translateY(10px) scale(0.9);
+    transition: opacity .5s ease, transform .5s ease;
+  }
+  #message.show{
+    opacity:1;
+    transform: translateY(0) scale(1);
+  }
+
+  .flying-photo{
+    position: absolute;
+    bottom: -10%;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    object-fit: cover;
+    opacity: 0.85;
+    animation: rise linear infinite;
+  }
+</style>
+</head>
+<body>
+
+<div class="floating-hearts" id="floatingHearts"></div>
+
+<div class="card">
+  <div class="gallery">
+    <svg viewBox="0 0 32 29"><path fill="currentColor" d="M23.6 0c-3.4 0-6.4 2-7.6 4.9C14.8 2 11.8 0 8.4 0 3.8 0 0 3.7 0 8.3c0 8.4 9.5 13.6 16 20 6.5-6.4 16-11.6 16-20C32 3.7 28.2 0 23.6 0z"/></svg>
+    <svg viewBox="0 0 32 29"><path fill="currentColor" d="M23.6 0c-3.4 0-6.4 2-7.6 4.9C14.8 2 11.8 0 8.4 0 3.8 0 0 3.7 0 8.3c0 8.4 9.5 13.6 16 20 6.5-6.4 16-11.6 16-20C32 3.7 28.2 0 23.6 0z"/></svg>
+    <svg viewBox="0 0 32 29"><path fill="currentColor" d="M23.6 0c-3.4 0-6.4 2-7.6 4.9C14.8 2 11.8 0 8.4 0 3.8 0 0 3.7 0 8.3c0 8.4 9.5 13.6 16 20 6.5-6.4 16-11.6 16-20C32 3.7 28.2 0 23.6 0z"/></svg>
+  </div>
+
+  <h1>Жмі 👇</h1>
+
+  <button id="loveBtn">Сюда ✨</button>
+
+  <div id="message"></div>
+</div>
+
+<script>
+  const btn = document.getElementById('loveBtn');
+  const msg = document.getElementById('message');
+  const phrases = ['я тебе люблю ❤️', 'дуже сильно люблю 💗', 'ти ахуєнна 🥰'];
+  let i = 0;
+
+  btn.addEventListener('click', () => {
+    msg.textContent = phrases[i % phrases.length];
+    msg.classList.remove('show');
+    void msg.offsetWidth;
+    msg.classList.add('show');
+    i++;
+    spawnBurst();
+  });
+
+  function spawnBurst(){
+    for(let k=0;k<6;k++){
+      const h = document.createElement('img');
+      h.src = 'photo.jpg';
+      h.className = 'flying-photo';
+      h.style.left = (40 + Math.random()*20) + '%';
+      h.style.animationDuration = (2.5 + Math.random()*2) + 's';
+      document.getElementById('floatingHearts').appendChild(h);
+      setTimeout(()=>h.remove(), 4500);
+    }
+  }
+
+  function ambientHeart(){
+    const container = document.getElementById('floatingHearts');
+    const h = document.createElement('img');
+    h.src = 'photo.jpg';
+    h.className = 'flying-photo';
+    h.style.left = Math.random()*100 + '%';
+    h.style.animationDuration = (6 + Math.random()*6) + 's';
+    container.appendChild(h);
+    setTimeout(()=>h.remove(), 13000);
+  }
+  setInterval(ambientHeart, 900);
+</script>
+
+</body>
+</html>
